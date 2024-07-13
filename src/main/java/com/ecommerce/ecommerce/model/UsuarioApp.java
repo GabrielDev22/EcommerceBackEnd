@@ -41,5 +41,9 @@ public class UsuarioApp {
     @JoinTable(name = "tb_users_app_roles", joinColumns = @JoinColumn(name = "usuario_app_id"), inverseJoinColumns = @JoinColumn(name = "role_app_id"))
     private List<RolesApp> role;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "tb_product_users", joinColumns = @JoinColumn(name = "tb_product_id"), inverseJoinColumns = @JoinColumn(name = "tb_product_container"))
+    private List<ProductCreateForUser> productList;
+
 
 }

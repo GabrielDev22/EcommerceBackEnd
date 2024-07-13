@@ -25,7 +25,7 @@ public class CreateUser {
     @NotBlank
     private String password;
     @Valid
-    @Size(max = 1, message = "The user cannot have more than 1 roles")
+    @Size(max = 2, message = "The user cannot have more than 1 roles")
     private List<String> rolesApp;
 
 }

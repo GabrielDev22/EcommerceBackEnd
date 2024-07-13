@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -139,10 +140,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities = rolesAppSet.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleEnum().name())).collect(Collectors.toList());
         SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = new UsernamePasswordAuthenticationToken(usuarioCreate.getUsername(), usuarioCreate.getPassword(), authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(usuarioCreate.getUsername(), null, authorities);
         String accessToken = jwtUtils.createToken(authentication);
 
-        AuthUserResponse authUserResponse = new AuthUserResponse(usuarioCreate.getUsername(), "user Create succesfully",accessToken, true);
+        AuthUserResponse authUserResponse = new AuthUserResponse(username, "user Create succesfully",accessToken, true);
         return authUserResponse;
     }
 

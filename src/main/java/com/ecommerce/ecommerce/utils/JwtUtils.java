@@ -63,10 +63,10 @@ public class JwtUtils {
     public DecodedJWT validateToken(String token){
         try{
             Algorithm algorithm = Algorithm.HMAC256(this.privateKey);
-            JWTVerifier verifierToken = JWT.require(algorithm)
+            JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer(this.userGeneratorJWT)
                     .build();
-            DecodedJWT decodedJWT = verifierToken.verify(token);
+            DecodedJWT decodedJWT = verifier.verify(token);
             return decodedJWT;
 
         }catch (JWTVerificationException exception){
@@ -75,11 +75,11 @@ public class JwtUtils {
     }
 
     public String extractUsername(DecodedJWT decodedJWT){
-        return decodedJWT.getSubject().toLowerCase();
+        return decodedJWT.getSubject().toString();
     }
 
-    public Claim getSpecifiClaim(DecodedJWT decodedJWT, String clainName){
-        return decodedJWT.getClaim(clainName);
+    public Claim getSpecifiClaim(DecodedJWT decodedJWT, String claimName){
+        return decodedJWT.getClaim(claimName);
     }
 
     public Map<String, Claim> returnAllClaims(DecodedJWT decodedJWT) {

@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +21,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -30,18 +32,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
-                .csrf(AbstractHttpConfigurer:: disable)
+                .csrf(csrf -> csrf.disable())
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(http ->
-                    http
-                            .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/auth/create").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/auth/logout").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/auth/refreshToken").permitAll()
-                            .anyRequest().denyAll()
-                )
+                .authorizeHttpRequests(http -> {
+                            http.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
+                            http.requestMatchers(HttpMethod.POST, "/auth/create").permitAll();
+                            http.requestMatchers(HttpMethod.POST, "/auth/logout").permitAll();
+                            http.requestMatchers(HttpMethod.POST, "/auth/refreshToken").permitAll();
+                            http.requestMatchers(HttpMethod.POST, "/product/create").permitAll();
+                            http.anyRequest().authenticated();
+                })
                 .build();
     }
 
@@ -67,7 +69,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "UPDATE", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "UPDATE", "DELETE"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setMaxAge(3600L);

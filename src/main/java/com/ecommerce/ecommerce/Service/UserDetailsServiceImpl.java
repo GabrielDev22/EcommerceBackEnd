@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -124,6 +125,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new IllegalStateException("The roles specified does no exist");
         }
 
+        String uuid = UUID.randomUUID().toString();
         UsuarioApp usuarioApp = UsuarioApp.builder()
                 .name(name)
                 .lastName(lastName)
@@ -135,6 +137,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .accountNoExpired(true)
                 .accountNoLocked(true)
                 .credentialNoExpired(true)
+                .userId(UUID.fromString(uuid))
                 .build();
         UsuarioApp usuarioCreate = usuarioApprRepository.save(usuarioApp);
         List<SimpleGrantedAuthority> authorities = rolesAppSet.stream()

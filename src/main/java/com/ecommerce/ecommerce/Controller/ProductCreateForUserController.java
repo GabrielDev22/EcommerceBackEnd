@@ -2,11 +2,13 @@ package com.ecommerce.ecommerce.Controller;
 
 import com.ecommerce.ecommerce.Service.ProductCreateForUserService;
 import com.ecommerce.ecommerce.model.ProductCreateForUser;
+import com.ecommerce.ecommerce.model.UsuarioApp;
+import com.ecommerce.ecommerce.repository.UsuarioApprRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/product")
@@ -14,8 +16,22 @@ public class ProductCreateForUserController {
 
     @Autowired
     private ProductCreateForUserService productCreateForUserService;
-    @PostMapping("/create")
-    public ProductCreateForUser createProduct(@RequestBody ProductCreateForUser createProduct){
-        return this.productCreateForUserService.createProduct(createProduct);
+
+    @Autowired
+    private UsuarioApprRepository usuarioApprRepository;
+
+    @GetMapping("/getAll")
+    public List<ProductCreateForUser> getAllProduct(){
+        return productCreateForUserService.getAllProduct();
     }
+
+    @PostMapping("/create")
+    public ProductCreateForUser createProduct(@ModelAttribute  ProductCreateForUser createProduct,
+                                              @RequestParam("imagenFile")MultipartFile imagenFile,
+                                              @RequestParam("userId")String userId ){
+
+        ProductCreateForUser createdProduct = productCreateForUserService.createProduct(createProduct, userId, imagenFile);
+        return createdProduct;
+    }
+
 }

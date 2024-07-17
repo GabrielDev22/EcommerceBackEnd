@@ -1,6 +1,8 @@
 package com.ecommerce.ecommerce.config;
 
 import com.ecommerce.ecommerce.Service.UserDetailsServiceImpl;
+import jakarta.servlet.MultipartConfigElement;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -42,6 +45,7 @@ public class SecurityConfig {
                             http.requestMatchers(HttpMethod.POST, "/auth/logout").permitAll();
                             http.requestMatchers(HttpMethod.POST, "/auth/refreshToken").permitAll();
                             http.requestMatchers(HttpMethod.POST, "/product/create").permitAll();
+                            http.requestMatchers(HttpMethod.POST, "/product/getAll").permitAll();
                             http.anyRequest().authenticated();
                 })
                 .build();
@@ -77,5 +81,6 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
 }

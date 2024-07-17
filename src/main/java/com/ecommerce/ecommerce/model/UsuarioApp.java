@@ -6,8 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,6 +24,8 @@ public class UsuarioApp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(unique = true)
+    private UUID userId;
     private String name;
     private String lastName;
     private String correo;
@@ -41,9 +47,6 @@ public class UsuarioApp {
     @JoinTable(name = "tb_users_app_roles", joinColumns = @JoinColumn(name = "usuario_app_id"), inverseJoinColumns = @JoinColumn(name = "role_app_id"))
     private List<RolesApp> role;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "tb_product_users", joinColumns = @JoinColumn(name = "tb_product_id"), inverseJoinColumns = @JoinColumn(name = "tb_product_container"))
-    private List<ProductCreateForUser> productList;
-
-
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ProductCreateForUser> productList = new ArrayList<>();
 }

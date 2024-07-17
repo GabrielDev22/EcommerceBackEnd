@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,13 +31,18 @@ public class ProductCreateForUser implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String productName;
     private String productDescription;
     private int productPrice;
-    private String productImagen;
+    @Lob
+    @Column(name = "productImagen", nullable = false)
+    private byte[] productImagen;
     private Character productCategory;
     private String productSellerName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UsuarioApp usuario;
 
     public boolean isValidProductCategory(Character productCategory){
         return Arrays.asList(CATEGORY_TECNOLOGY,

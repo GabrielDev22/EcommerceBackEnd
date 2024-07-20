@@ -44,8 +44,6 @@ public class SecurityConfig {
                             http.requestMatchers(HttpMethod.POST, "/auth/create").permitAll();
                             http.requestMatchers(HttpMethod.POST, "/auth/logout").permitAll();
                             http.requestMatchers(HttpMethod.POST, "/auth/refreshToken").permitAll();
-                            http.requestMatchers(HttpMethod.POST, "/product/create").permitAll();
-                            http.requestMatchers(HttpMethod.POST, "/product/getAll").permitAll();
                             http.anyRequest().authenticated();
                 })
                 .build();

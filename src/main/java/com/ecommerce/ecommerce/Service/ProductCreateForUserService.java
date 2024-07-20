@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,6 +68,27 @@ public class ProductCreateForUserService {
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("Error creating product", e);
+        }
+    }
+
+    public void deleteProductByUserId(String userId, Integer productId){
+        try{
+
+            UUID uuidUserId = UUID.fromString(userId);
+
+            UsuarioApp usuarioApp = (usuarioApprRepository.findByUserId(uuidUserId)
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario con UUID " + userId + "no encontrado")));
+
+            ProductCreateForUser product = productCreateForUserRepository.findById(productId)
+                    .orElseThrow(() -> new NullPointerException("Product con ID " + productId + "no encontrado"));
+
+            if(!product.getUsuario().getUserId().equals(usuarioApp.getUserId())){
+                throw new AccessDeniedException("El usuario no tiene permisos para eliminar este producto");
+            }
+            productCreateForUserRepository.delete(product);
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

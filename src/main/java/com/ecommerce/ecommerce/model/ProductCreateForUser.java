@@ -44,6 +44,9 @@ public class ProductCreateForUser implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private UsuarioApp usuario;
 
+    @Transient
+    private UUID userId;
+
     public boolean isValidProductCategory(Character productCategory){
         return Arrays.asList(CATEGORY_TECNOLOGY,
                 CATEGORY_VEHICLES,

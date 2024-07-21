@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtils {
 
-    @Value("${app.ecommer.security.jwt.key.private}")
+    @Value("${app.ecommerce.security.jwt.key.private}")
     private String privateKey;
 
     @Value("${app.security.jwt.user.generator}")
@@ -82,8 +82,5 @@ public class JwtUtils {
         return decodedJWT.getClaim(claimName);
     }
 
-    public Map<String, Claim> returnAllClaims(DecodedJWT decodedJWT) {
-        return decodedJWT.getClaims();
-    }
 
 }

@@ -1,7 +1,11 @@
 package com.ecommerce.ecommerce.config;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.ecommerce.ecommerce.Service.UserDetailsServiceImpl;
+import com.ecommerce.ecommerce.utils.JwtUtils;
 import jakarta.servlet.MultipartConfigElement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerJwtAutoConfiguration;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +23,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -31,6 +36,9 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
@@ -46,6 +54,7 @@ public class SecurityConfig {
                             http.requestMatchers(HttpMethod.POST, "/auth/refreshToken").permitAll();
                             http.anyRequest().authenticated();
                 })
+                .addFilterBefore(new JwtTokenValidtor(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
     }
 

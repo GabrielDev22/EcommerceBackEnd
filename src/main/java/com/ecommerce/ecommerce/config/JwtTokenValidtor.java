@@ -22,16 +22,18 @@ import java.io.IOException;
 import java.util.Collection;
 
 
-@AllArgsConstructor
 public class JwtTokenValidtor extends OncePerRequestFilter {
-
 
     private final JwtUtils jwtUtils;
 
+    public JwtTokenValidtor(JwtUtils jwtUtils) {
+        this.jwtUtils = jwtUtils;
+    }
+
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
-                                 @NotNull HttpServletResponse response,
-                                 @NotNull FilterChain filterChain) throws IOException, ServletException {
+                                    @NotNull HttpServletResponse response,
+                                    @NotNull FilterChain filterChain) throws IOException, ServletException {
         String jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         if(jwtToken != null){
             jwtToken = jwtToken.substring(7);

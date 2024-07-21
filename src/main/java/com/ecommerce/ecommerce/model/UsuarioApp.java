@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -48,5 +49,6 @@ public class UsuarioApp {
     private List<RolesApp> role;
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<ProductCreateForUser> productList = new ArrayList<>();
 }

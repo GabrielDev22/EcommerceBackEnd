@@ -12,5 +12,4 @@ import java.util.UUID;
 public interface ProductCreateForUserRepository extends JpaRepository<ProductCreateForUser, Integer> {
 
     Optional<ProductCreateForUser> findById(Integer id);
-    Optional<ProductCreateForUser> findByUsuario_UserId(UUID userId);
 }
